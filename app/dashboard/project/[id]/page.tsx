@@ -1,9 +1,10 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '@/src/utils/supabase/client'
 import { useRouter, useParams } from 'next/navigation'
 
-export default function ProjectPage() {
+// --- PART 1: THE FILLING (Your actual page logic) ---
+function ProjectContent() {
   const [project, setProject] = useState<any>(null)
   const [tasks, setTasks] = useState<any[]>([])
   const [contributions, setContributions] = useState<any[]>([])
@@ -246,5 +247,14 @@ export default function ProjectPage() {
 
       </div>
     </div>
+  )
+}
+
+// --- PART 2: THE BREAD (The wrapper that Vercel needs) ---
+export default function ProjectPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-950 text-white p-12 text-center">Loading Project...</div>}>
+      <ProjectContent />
+    </Suspense>
   )
 }
